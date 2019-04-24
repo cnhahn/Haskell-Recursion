@@ -34,9 +34,7 @@ import Prelude hiding (lookup)
 assoc :: Int -> String -> [(String, Int)] -> Int
 --assoc def key kvs = error "TBD:assoc"
 assoc def key [] = def
-assoc def key ((k1, v1):xs) = if k1 == key
-			then v1
-			else assoc def key xs
+assoc def key ((k1, v1):xs) = if k1 == key then v1 else assoc def key xs
 
 
 --------------------------------------------------------------------------------
@@ -64,10 +62,12 @@ removeDuplicates l = reverse (helper [] l)
     helper seen []     = seen
     helper seen (x:xs) = helper seen' rest'
       where
-        seen'          = error "TBD:helper:seen"
-        rest'          = error "TBD:helper:rest"
---        seen'          = if elem x seen then seen else seen ++ [x]
---        rest'          = 
+--	  seen'          = error "TBD:helper:seen"
+--        rest'          = error "TBD:helper:rest"
+--        seen'          = if (elem x seen) then seen else helper ([x] ++ seen) xs
+        seen'          = if elem x seen then seen ++ [] else [x] ++ seen
+        rest'          = removeDuplicates xs
+
 
 --------------------------------------------------------------------------------
 {- | `wwhile f x` returns `x'` where there exist values
@@ -87,7 +87,7 @@ removeDuplicates l = reverse (helper [] l)
 
 wwhile :: (a -> (Bool, a)) -> a -> a
 wwhile f n = error "TBD:wwhile"
---wwhile f n = if n then wwhile (f,
+--wwhile f n = if n then wwhile f  else 
 
 --------------------------------------------------------------------------------
 {- | The **fixpoint** of a function `f` starting at `x`
