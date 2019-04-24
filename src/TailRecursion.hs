@@ -65,7 +65,7 @@ removeDuplicates l = reverse (helper [] l)
 --	  seen'          = error "TBD:helper:seen"
 --        rest'          = error "TBD:helper:rest"
 --        seen'          = if (elem x seen) then seen else helper ([x] ++ seen) xs
-        seen'          = if elem x seen then seen ++ [] else [x] ++ seen
+        seen'          = if elem x seen then seen else [x] ++ seen
         rest'          = removeDuplicates xs
 
 
@@ -85,9 +85,15 @@ removeDuplicates l = reverse (helper [] l)
 -- >>> let f x = let xx = x * x * x in (xx < 100, xx) in wwhile f 2
 -- 512
 
+frist :: (Bool,b) -> Bool
+frist (a,b) = a
+
+second :: (Bool,b) -> b
+second (a,c) = c
+
 wwhile :: (a -> (Bool, a)) -> a -> a
-wwhile f n = error "TBD:wwhile"
---wwhile f n = if n then wwhile f  else 
+--wwhile f n = error "TBD:wwhile"
+wwhile f n = if (frist (f n)) == True then wwhile f (second (f n)) else (second (f n))
 
 --------------------------------------------------------------------------------
 {- | The **fixpoint** of a function `f` starting at `x`
