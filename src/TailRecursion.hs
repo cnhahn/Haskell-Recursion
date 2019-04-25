@@ -140,7 +140,7 @@ scnd (c,d) = d
 
 fixpointL :: (Int -> Int) -> Int -> [Int]
 --fixpointL f x = error "TBD:fixpointL"
-fixpointL f x = if x == (f(x)) then [x] else [x] ++ (fixpointL f (f(x)))
+fixpointL f x = if x == (f(x)) then [x] else x:(fixpointL f (f(x)))
 
 
 -- You should see the following behavior at the prompt:
