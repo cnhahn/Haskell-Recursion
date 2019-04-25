@@ -25,6 +25,8 @@ data Expr
   | Average Expr Expr
   | Times   Expr Expr
   | Thresh  Expr Expr Expr Expr
+  | Squared Expr
+  | Cubed   Expr
   deriving (Show)
 
 --------------------------------------------------------------------------------
@@ -92,7 +94,8 @@ exprToString (Average e1 e2)      = "((" ++ exprToString e1 ++ "+" ++ exprToStri
 exprToString (Times e1 e2)        = exprToString e1 ++ "*" ++ exprToString e2
 exprToString (Thresh e1 e2 e3 e4) = "(" ++ exprToString e1 ++ "<" ++ exprToString e2 ++ "?" ++ exprToString e3 ++ ":" ++ exprToString e4 ++ ")"
 
-
+exprToString (Squared e1)         = exprToString e1 ++ "*" ++ exprToString e1
+exprToString (Cubed e1)           = exprToString e1 ++ "*" ++ exprToString e1 ++ "*" ++ exprToString e1
 --------------------------------------------------------------------------------
 -- | Evaluating Expressions at a given X, Y co-ordinate ------------------------
 --------------------------------------------------------------------------------
@@ -126,6 +129,8 @@ eval x y (Average e1 e2) = ((eval x y e1) + (eval x y e2))/2
 eval x y (Times e1 e2) = ((eval x y e1) * (eval x y e2))
 eval x y (Thresh e1 e2 e3 e4) = if ((eval x y e1) < (eval x y e2)) then eval x y e3 else eval x y e4
 
+eval x y (Squared e1) = ((eval x y e1) * (eval x y e1))
+eval x y (Cubed e1) = ((eval x y e1) * (eval x y e1) * (eval x y e1))
 
 evalFn :: Double -> Double -> Expr -> Double
 evalFn x y e = assert (-1.0 <= rv && rv <= 1.0) rv
@@ -175,9 +180,11 @@ build d
   | r == 3    = Times (build (d-1)) (build (d-1))
   | r == 4    = Thresh (build (d-1)) (build (d-1)) (build (d-1)) (build (d-1))
   | r == 5    = Sine (Average (build (d-1)) (build (d-1)))
-  | otherwise = Cosine (Average (build (d-1)) (build (d-1)))
+  | r == 6    = Squared (Times (build (d-1)) (build (d-1)))
+  | r == 7    = Sine (Average (build (d-1)) (build (d-1)))
+  | otherwise = Cosine (Cubed (build (d-1)))
   where
-    r         = rand 6
+    r         = rand 8
 --  | d == 0    = Sine (Average (build (3)) (build (2)))
 --  | d == 1    = Cosine (Times (build (3)) (build (2)))
 --  | d == 2    = Average (build (3)) (build (2))
