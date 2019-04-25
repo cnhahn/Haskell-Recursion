@@ -1,5 +1,19 @@
 -- | Based on code by Chris Stone
 
+{-
+
+Cited helpfull source matterial for clearity:
+
+ -- Used resources from http://learnyouhaskell.com/chapters.
+ -- Used resources from https://www.schoolofhaskell.com
+ -- Used resources form https://en.wikibooks.org/wiki/Haskell/Control_structures
+ -- Used resources from the chapters 1, 2, 4 as suggested on piazza. 
+ -- Also got help form TA's in section and group disscussion.
+ -- Also got help form MSI instructor and group disscussion.
+
+-}
+
+
 {-# LANGUAGE FlexibleContexts #-}
 
 module RandomArt where
