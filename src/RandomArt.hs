@@ -164,25 +164,48 @@ build 0
   | otherwise = VarY
   where
     r         = rand 10
-build d       = error "TBD:build"
+--build d       = error "TBD:build"
+build d
 
+--  | d < 5     = Sine (build 0)
+--  | otherwise = VarY       
+
+  | r == 1    = Cosine (Times (build (d-1)) (build (d-1)))
+  | r == 2    = Average (build (d-1)) (build (d-1))
+  | r == 3    = Times (build (d-1)) (build (d-1))
+  | r == 4    = Thresh (build (d-1)) (build (d-1)) (build (d-1)) (build (d-1))
+  | r == 5    = Sine (Average (build (d-1)) (build (d-1)))
+  | otherwise = Cosine (Average (build (d-1)) (build (d-1)))
+  where
+    r         = rand 6
+--  | d == 0    = Sine (Average (build (3)) (build (2)))
+--  | d == 1    = Cosine (Times (build (3)) (build (2)))
+--  | d == 2    = Average (build (3)) (build (2))
+--  | d == 3    = Times (build (3)) (build (2))
+--  | d == 4    = Thresh (build (3)) (build (2)) (build (1)) (build (4))
+--  | otherwise = Cosine (Average (build (0)) (build (0)))
+--d is going to be an int return random expr
+ 
 --------------------------------------------------------------------------------
 -- | Best Image "Seeds" --------------------------------------------------------
 --------------------------------------------------------------------------------
 
 -- grayscale
 g1, g2, g3 :: (Int, Int)
-g1 = (error "TBD:depth1", error "TBD:seed1")
-g2 = (error "TBD:depth2", error "TBD:seed2")
-g3 = (error "TBD:depth3", error "TBD:seed3")
-
-
+--g1 = (error "TBD:depth1", error "TBD:seed1")
+--g2 = (error "TBD:depth2", error "TBD:seed2")
+--g3 = (error "TBD:depth3", error "TBD:seed3")
+g1 = (1, 2)
+g2 = (1, 3)
+g3 = (1, 4)
 -- grayscale
 c1, c2, c3 :: (Int, Int)
-c1 = (error "TBD:depth1", error "TBD:seed1")
-c2 = (error "TBD:depth2", error "TBD:seed2")
-c3 = (error "TBD:depth3", error "TBD:seed3")
-
+--c1 = (error "TBD:depth1", error "TBD:seed1")
+--c2 = (error "TBD:depth2", error "TBD:seed2")
+--c3 = (error "TBD:depth3", error "TBD:seed3")
+c1 = (2, 5)
+c2 = (2, 3)
+c3 = (2, 1)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------

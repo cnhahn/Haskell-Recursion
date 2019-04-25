@@ -132,8 +132,16 @@ wwhile f n = if (frist (f n)) == True then wwhile f (second (f n)) else (second 
        * xn = x_{n+1}
   -}
 
+frst :: (Int, Int) -> Int
+frst (c,d) = c
+
+scnd :: (Int, Int) -> Int
+scnd (c,d) = d
+
 fixpointL :: (Int -> Int) -> Int -> [Int]
-fixpointL f x = error "TBD:fixpointL"
+--fixpointL f x = error "TBD:fixpointL"
+fixpointL f x = if x == (f(x)) then [x] else [x] ++ (fixpointL f (f(x)))
+
 
 -- You should see the following behavior at the prompt:
 
@@ -169,7 +177,12 @@ collatz n
 fixpointW :: (Int -> Int) -> Int -> Int
 fixpointW f x = wwhile wwf x
  where
-   wwf        = error "TBD:fixpoint:wwf"
+--   wwf        = error "TBD:fixpoint:wwf"
+--   wwf        = if x == (f(x)) then (False, x) else (True, second(f x))
+     wwf     w  = if w == (f(w)) then (False, w) else (True, f(w))
+
+--fixpointL takes f(x) to determine to stop. 
+--wwhile takes tuple to stop. 
 
 -- >>> fixpointW collatz 1
 -- 1
