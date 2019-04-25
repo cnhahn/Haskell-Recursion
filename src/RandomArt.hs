@@ -34,13 +34,13 @@ import qualified Data.Vector.Storable as V
 data Expr
   = VarX
   | VarY
-  | Sine    Expr
-  | Cosine  Expr
-  | Average Expr Expr
-  | Times   Expr Expr
-  | Thresh  Expr Expr Expr Expr
-  | Squared Expr
-  | Cubed   Expr
+  | Sine         Expr
+  | Cosine       Expr
+  | Average      Expr Expr
+  | Times        Expr Expr
+  | Thresh       Expr Expr Expr Expr
+  | Squared      Expr
+  | ThreeCubed   Expr Expr Expr
   deriving (Show)
 
 --------------------------------------------------------------------------------
@@ -109,7 +109,7 @@ exprToString (Times e1 e2)        = exprToString e1 ++ "*" ++ exprToString e2
 exprToString (Thresh e1 e2 e3 e4) = "(" ++ exprToString e1 ++ "<" ++ exprToString e2 ++ "?" ++ exprToString e3 ++ ":" ++ exprToString e4 ++ ")"
 
 exprToString (Squared e1)         = exprToString e1 ++ "*" ++ exprToString e1
-exprToString (Cubed e1)           = exprToString e1 ++ "*" ++ exprToString e1 ++ "*" ++ exprToString e1
+exprToString (ThreeCubed e1 e2 e3)     = exprToString e1 ++ "*" ++ exprToString e2 ++ "*" ++ exprToString e3
 --------------------------------------------------------------------------------
 -- | Evaluating Expressions at a given X, Y co-ordinate ------------------------
 --------------------------------------------------------------------------------
@@ -144,7 +144,7 @@ eval x y (Times e1 e2) = ((eval x y e1) * (eval x y e2))
 eval x y (Thresh e1 e2 e3 e4) = if ((eval x y e1) < (eval x y e2)) then eval x y e3 else eval x y e4
 
 eval x y (Squared e1) = ((eval x y e1) * (eval x y e1))
-eval x y (Cubed e1) = ((eval x y e1) * (eval x y e1) * (eval x y e1))
+eval x y (ThreeCubed e1 e2 e3) = ((eval x y e1) * (eval x y e2) * (eval x y e3))
 
 evalFn :: Double -> Double -> Expr -> Double
 evalFn x y e = assert (-1.0 <= rv && rv <= 1.0) rv
@@ -196,7 +196,7 @@ build d
   | r == 5    = Sine (Average (build (d-1)) (build (d-1)))
   | r == 6    = Squared (Times (build (d-1)) (build (d-1)))
   | r == 7    = Sine (Average (build (d-1)) (build (d-1)))
-  | otherwise = Cosine (Cubed (build (d-1)))
+  | otherwise = Cosine (ThreeCubed (build (d-1)) (build (d-1)) (build (d-1)))
   where
     r         = rand 8
 --  | d == 0    = Sine (Average (build (3)) (build (2)))
@@ -216,17 +216,17 @@ g1, g2, g3 :: (Int, Int)
 --g1 = (error "TBD:depth1", error "TBD:seed1")
 --g2 = (error "TBD:depth2", error "TBD:seed2")
 --g3 = (error "TBD:depth3", error "TBD:seed3")
-g1 = (1, 2)
-g2 = (1, 3)
-g3 = (1, 4)
+g1 = (7, 10)
+g2 = (6, 13)
+g3 = (8, 9)
 -- grayscale
 c1, c2, c3 :: (Int, Int)
 --c1 = (error "TBD:depth1", error "TBD:seed1")
 --c2 = (error "TBD:depth2", error "TBD:seed2")
 --c3 = (error "TBD:depth3", error "TBD:seed3")
-c1 = (2, 5)
-c2 = (2, 3)
-c3 = (2, 1)
+c1 = (8, 11)
+c2 = (7, 13)
+c3 = (6, 10)
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
