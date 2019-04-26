@@ -28,6 +28,8 @@ import           Codec.Picture.Png
 import           Codec.Picture.Types
 import qualified Data.Vector.Storable as V
 
+import Debug.Trace
+
 --------------------------------------------------------------------------------
 -- | A Data Type for Grayscale Expressions -------------------------------------
 --------------------------------------------------------------------------------
@@ -184,21 +186,23 @@ build 0
   where
     r         = rand 10
 --build d       = error "TBD:build"
+
 build d
+  | r == 1    = Cosine (Times (build (d-1)) (build (d-1)))
+  | r == 2    =  Average (build (d-1)) (build (d-1))
+  | r == 3    =  Times (build (d-1)) (build (d-1))
+  | r == 4    =  Thresh (build (d-1)) (build (d-1)) (build (d-1)) (build (d-1))
+  | r == 5    =  Sine (Average (build (d-1)) (build (d-1)))
+  | r == 6    =  Squared (Times (build (d-1)) (build (d-1)))
+  | r == 7    =  Sine (Average (build (d-1)) (build (d-1)))
+  | otherwise =  Cosine (ThreeCubed (build (d-1)) (build (d-1)) (build (d-1)))
+  where
+
+    r         = rand 8
 
 --  | d < 5     = Sine (build 0)
 --  | otherwise = VarY       
 
-  | r == 1    = Cosine (Times (build (d-1)) (build (d-1)))
-  | r == 2    = Average (build (d-1)) (build (d-1))
-  | r == 3    = Times (build (d-1)) (build (d-1))
-  | r == 4    = Thresh (build (d-1)) (build (d-1)) (build (d-1)) (build (d-1))
-  | r == 5    = Sine (Average (build (d-1)) (build (d-1)))
-  | r == 6    = Squared (Times (build (d-1)) (build (d-1)))
-  | r == 7    = Sine (Average (build (d-1)) (build (d-1)))
-  | otherwise = Cosine (ThreeCubed (build (d-1)) (build (d-1)) (build (d-1)))
-  where
-    r         = rand 8
 --  | d == 0    = Sine (Average (build (3)) (build (2)))
 --  | d == 1    = Cosine (Times (build (3)) (build (2)))
 --  | d == 2    = Average (build (3)) (build (2))
@@ -224,7 +228,7 @@ c1, c2, c3 :: (Int, Int)
 --c1 = (error "TBD:depth1", error "TBD:seed1")
 --c2 = (error "TBD:depth2", error "TBD:seed2")
 --c3 = (error "TBD:depth3", error "TBD:seed3")
-c1 = (8, 11)
+c1 = (3, 12)
 c2 = (7, 13)
 c3 = (6, 10)
 --------------------------------------------------------------------------------
