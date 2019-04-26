@@ -42,7 +42,7 @@ data Expr
   | Times        Expr Expr
   | Thresh       Expr Expr Expr Expr
   | Squared      Expr
-  | ThreeCubed   Expr Expr Expr
+  | PiMulti      Expr Expr Expr
   deriving (Show)
 
 --------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ exprToString (Times e1 e2)        = exprToString e1 ++ "*" ++ exprToString e2
 exprToString (Thresh e1 e2 e3 e4) = "(" ++ exprToString e1 ++ "<" ++ exprToString e2 ++ "?" ++ exprToString e3 ++ ":" ++ exprToString e4 ++ ")"
 
 exprToString (Squared e1)         = exprToString e1 ++ "*" ++ exprToString e1
-exprToString (ThreeCubed e1 e2 e3)     = exprToString e1 ++ "*" ++ exprToString e2 ++ "*" ++ exprToString e3
+exprToString (PiMulti e1 e2 e3)   = "(pi*(" ++ exprToString e1 ++ "+" ++ exprToString e2 ++ ")*" ++ exprToString e3 ++ ")"
 --------------------------------------------------------------------------------
 -- | Evaluating Expressions at a given X, Y co-ordinate ------------------------
 --------------------------------------------------------------------------------
@@ -146,7 +146,7 @@ eval x y (Times e1 e2) = ((eval x y e1) * (eval x y e2))
 eval x y (Thresh e1 e2 e3 e4) = if ((eval x y e1) < (eval x y e2)) then eval x y e3 else eval x y e4
 
 eval x y (Squared e1) = ((eval x y e1) * (eval x y e1))
-eval x y (ThreeCubed e1 e2 e3) = ((eval x y e1) * (eval x y e2) * (eval x y e3))
+eval x y (PiMulti e1 e2 e3) = (pi* ((eval x y e1) + (eval x y e2)) * (eval x y e3) )
 
 evalFn :: Double -> Double -> Expr -> Double
 evalFn x y e = assert (-1.0 <= rv && rv <= 1.0) rv
@@ -188,14 +188,14 @@ build 0
 --build d       = error "TBD:build"
 
 build d
-  | r == 1    = Cosine (Times (build (d-1)) (build (d-1)))
+  | r == 1    =  Cosine (Times (build (d-1)) (build (d-1)))
   | r == 2    =  Average (build (d-1)) (build (d-1))
   | r == 3    =  Times (build (d-1)) (build (d-1))
   | r == 4    =  Thresh (build (d-1)) (build (d-1)) (build (d-1)) (build (d-1))
   | r == 5    =  Sine (Average (build (d-1)) (build (d-1)))
   | r == 6    =  Squared (Times (build (d-1)) (build (d-1)))
   | r == 7    =  Sine (Average (build (d-1)) (build (d-1)))
-  | otherwise =  Cosine (ThreeCubed (build (d-1)) (build (d-1)) (build (d-1)))
+  | otherwise =  Cosine (PiMulti (build (d-1)) (build (d-1)) (build (d-1)))
   where
 
     r         = rand 8
